@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 services:
   db:
@@ -10,7 +10,7 @@ services:
       - MYSQL_DATABASE=wordpress
     volumes:
       - dbdata:/var/lib/mysql
-    command: "--default-authentication-plugin=mysql_native_password"
+    command: '--default-authentication-plugin=mysql_native_password'
     networks:
       - app-network
 
@@ -39,6 +39,7 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - wordpress:/var/www/html
       - ./nginx-conf:/etc/nginx/conf.d
@@ -47,14 +48,14 @@ services:
       - app-network
 
   certbot:
-  depends_on:
-    - webserver
-  image: certbot/certbot
-  container_name: certbot
-  volumes:
-    - certbot-etc:/etc/letsencrypt
-    - wordpress:/var/www/html
-  command: certonly --webroot --webroot-path=/var/www/html --email mailcobay124@gmail.com --agree-tos --no-eff-email --staging -d afriboard.sn -d www.afriboard.sn
+    depends_on:
+      - webserver
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - wordpress:/var/www/html
+    command: certonly --webroot --webroot-path=/var/www/html --email kheuch124@gmail.com --agree-tos --no-eff-email --force-renewal -d afriboard_test.sn -d www.afriboard_test.sn
 
 volumes:
   certbot-etc:
